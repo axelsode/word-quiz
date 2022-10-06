@@ -71,7 +71,6 @@ const App = () => {
             <option value="8">Level 8</option>
             <option value="9">Level 9</option>
             <option value="10">Level 10</option>
-            
           </select>
         </div>
       )}
@@ -94,7 +93,6 @@ const App = () => {
                         disabled={clicked.includes(option)}
                         onClick={() =>
                           checkAnswer(option, optionIndex + 1, question.correct)
-
                         }
                       >
                         {option}
@@ -106,7 +104,9 @@ const App = () => {
               </div>
             ))}
           </div>
-          <button onClick={() => setChosenLevel(null)}>Go back</button>
+          <button onClick={() => setChosenLevel(null, setScore(0))}>
+            Go back
+          </button>
         </div>
       )}
     </div>
