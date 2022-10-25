@@ -5,6 +5,7 @@ const App = () => {
   const [chosenLevel, setChosenLevel] = useState(null)
   const [words, setWords] = useState(null)
   const [correctAnswers, setCorrectAnswers] = useState([])
+  const [falseAnswers, setFalseAnswers] = useState([]);
   const [clicked, setClicked] = useState([])
   const [score, setScore] = useState(0)
 
@@ -30,18 +31,19 @@ const App = () => {
         });
   }
 
-  console.log(words && words.quizlist)
+  
 
   useEffect(() => {
     if(chosenLevel) getWords()
   }, [chosenLevel])
 
   const checkAnswer = (option, optionIndex, correctAnswer) => {
-    console.log(optionIndex, correctAnswer);
+   
     if(optionIndex === correctAnswer) {
       setCorrectAnswers([...correctAnswers, option])
       setScore((score) => score + 1)
     } else {
+      setFalseAnswers([...falseAnswers, option])
       setScore((score) => score - 1)
     }
     setClicked([...clicked, option])
@@ -87,10 +89,12 @@ const App = () => {
                   <p key={_index}>{alternative}</p>
                 ))}
                 <div className="question-buttons">
-                  {question.option.map((option, optionIndex) => (
+                  {question.option.map((option, optionIndex, optionsArray) => (
                     <div key={optionIndex} className="question-button">
                       <button
-                        disabled={clicked.includes(option)}
+                        disabled={optionsArray.some((option) =>
+                          clicked.includes(option)
+                        )}
                         onClick={() =>
                           checkAnswer(option, optionIndex + 1, question.correct)
                         }
@@ -98,6 +102,7 @@ const App = () => {
                         {option}
                       </button>
                       {correctAnswers.includes(option) && <p>Correct</p>}
+                      {falseAnswers.includes(option) && <p>False</p>}
                     </div>
                   ))}
                 </div>
@@ -107,6 +112,7 @@ const App = () => {
           <button onClick={() => setChosenLevel(null, setScore(0))}>
             Go back
           </button>
+          <button onClick={() => setChosenLevel()}>Get new words</button>
         </div>
       )}
     </div>
@@ -114,3 +120,12 @@ const App = () => {
 };
 
 export default App;
+/*
+<button onClick={() => setChosenLevel()}>
+  Get new words
+</button>
+<button
+          onClick={() => console.log("Level:"+ chosenLevel + "!")}>
+            Get new words
+          </button>
+*/
